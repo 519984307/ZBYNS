@@ -45,6 +45,13 @@ signals:
     void toSendDataSignal(int channel_number,const QString& result);
 
     ///
+    /// \brief recvDataSignal 发送数据
+    /// \param channel_number
+    /// \param result
+    ///
+    void recvDataSignal(int channel_number,const QByteArray& result);
+
+    ///
     /// \brief setHeartbeatPackStateSignal 心跳包状态
     /// \param state
     ///
@@ -80,7 +87,7 @@ public slots:
     /// \brief toSendDataSlot 发送数据
     /// \param data 数据体
     ///
-    virtual void toSendDataSlot(int channel_number, const QString &data)=0;
+    virtual void toSendDataSlot(int channel_number, const QByteArray &data)=0;
 
     ///
     /// \brief releaseResourcesSlot 释放资源
@@ -89,7 +96,7 @@ public slots:
 
 };
 
-#define DataInterchangeInterfaceIID "ZBY.ContainerServer.DataInterchangeInterface/1.2.4.4"
+#define DataInterchangeInterfaceIID "ZBY.ContainerServer.DataInterchangeInterface/1.2.4.5"
 Q_DECLARE_INTERFACE(DataInterchangeInterface,DataInterchangeInterfaceIID);
 
 #endif // DATAINTERCHANGEINTERFACE_H

@@ -1,7 +1,9 @@
-#ifndef FILTERDIALOG_H
+﻿#ifndef FILTERDIALOG_H
 #define FILTERDIALOG_H
 
 #include <QDialog>
+#include <QAbstractButton>
+#include <QPushButton>
 
 namespace Ui {
 class FilterDialog;
@@ -17,6 +19,16 @@ public:
 
 private:
     Ui::FilterDialog *ui;
+
+signals:
+
+    ///
+    /// \brief signal_filterData 数据库筛选条件
+    /// \param data
+    ///
+    void signal_filterData(const QString &data);
+private slots:
+    void on_buttonBox_clicked(QAbstractButton *button);
 };
 
 #endif // FILTERDIALOG_H

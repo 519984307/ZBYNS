@@ -1,7 +1,11 @@
-#ifndef LOCKDIALOG_H
+﻿#ifndef LOCKDIALOG_H
 #define LOCKDIALOG_H
 
 #include <QDialog>
+#include <QStandardPaths>
+#include <QSettings>
+#include <QDir>
+#include <QMessageBox>
 
 namespace Ui {
 class LockDialog;
@@ -14,6 +18,13 @@ class LockDialog : public QDialog
 public:
     explicit LockDialog(QWidget *parent = nullptr);
     ~LockDialog();
+
+private slots:
+    void on_buttonBox_accepted();
+
+    void on_toolButton_pressed();
+
+    void on_toolButton_released();
 
 private:
     Ui::LockDialog *ui;

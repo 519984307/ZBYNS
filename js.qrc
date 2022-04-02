@@ -1,2 +1,14 @@
-<!DOCTYPE RCC>
-<RCC version="1.0"/>
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file>ico/conect.png</file>
+        <file>ico/data.png</file>
+        <file>ico/debug.png</file>
+        <file>ico/diconect.png</file>
+        <file>ico/ICO.ico</file>
+        <file>ico/lock.png</file>
+        <file>ico/log.png</file>
+        <file>ico/setting.png</file>
+        <file>ico/show.png</file>
+        <file>ico/video.png</file>
+    </qresource>
+</RCC>

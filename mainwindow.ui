@@ -6,17 +6,411 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>924</width>
+    <height>578</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>MainWindow</string>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>16777215</height>
+   </size>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
-  <widget class="QMenuBar" name="menubar"/>
-  <widget class="QStatusBar" name="statusbar"/>
+  <property name="windowTitle">
+   <string>ZBY NS</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="js.qrc">
+    <normaloff>:/new/prefix1/ico/ICO.ico</normaloff>:/new/prefix1/ico/ICO.ico</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_4" rowstretch="1,0">
+    <item row="1" column="2">
+     <widget class="QGroupBox" name="groupBox_3">
+      <property name="maximumSize">
+       <size>
+        <width>300</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="title">
+       <string>Statistical</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="0" colspan="2">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>StartTime:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_4">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>CapNum:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_5">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>0</string>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="1">
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>probability:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_6">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>0%</string>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="0" colspan="3">
+     <widget class="QGroupBox" name="groupBox">
+      <property name="title">
+       <string>Picture</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout" columnminimumwidth="1,1">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="autoFillBackground">
+          <bool>true</bool>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::Panel</enum>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLabel" name="label_2">
+         <property name="autoFillBackground">
+          <bool>true</bool>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::Panel</enum>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QGroupBox" name="groupBox_2">
+      <property name="minimumSize">
+       <size>
+        <width>400</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>100</height>
+       </size>
+      </property>
+      <property name="title">
+       <string>Result</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QLineEdit" name="lineEdit">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>66</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>25</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>NUL</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <widget class="QLineEdit" name="lineEdit_2">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>10</pointsize>
+               <weight>75</weight>
+               <italic>false</italic>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>NUL</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="lineEdit_3">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>10</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>NUL</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QGroupBox" name="groupBox_4">
+      <property name="maximumSize">
+       <size>
+        <width>200</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="title">
+       <string>Status</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_5">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>Activate</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLineEdit" name="lineEdit_7">
+         <property name="font">
+          <font>
+           <pointsize>15</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>32</width>
+     <height>32</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextBesideIcon</enum>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionSetting"/>
+   <addaction name="separator"/>
+   <addaction name="actionVideo_1"/>
+   <addaction name="actionVideo_2"/>
+   <addaction name="separator"/>
+   <addaction name="actionDataBase"/>
+   <addaction name="actionLog"/>
+   <addaction name="separator"/>
+   <addaction name="actionTest"/>
+   <addaction name="separator"/>
+   <addaction name="actionLock"/>
+   <addaction name="separator"/>
+  </widget>
+  <action name="actionSetting">
+   <property name="icon">
+    <iconset resource="js.qrc">
+     <normaloff>:/new/prefix1/ico/setting.png</normaloff>:/new/prefix1/ico/setting.png</iconset>
+   </property>
+   <property name="text">
+    <string>Setting</string>
+   </property>
+  </action>
+  <action name="actionDataBase">
+   <property name="icon">
+    <iconset resource="js.qrc">
+     <normaloff>:/new/prefix1/ico/data.png</normaloff>:/new/prefix1/ico/data.png</iconset>
+   </property>
+   <property name="text">
+    <string>DataBase</string>
+   </property>
+  </action>
+  <action name="actionTest">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="js.qrc">
+     <normaloff>:/new/prefix1/ico/debug.png</normaloff>:/new/prefix1/ico/debug.png</iconset>
+   </property>
+   <property name="text">
+    <string>Test</string>
+   </property>
+  </action>
+  <action name="actionLog">
+   <property name="icon">
+    <iconset resource="js.qrc">
+     <normaloff>:/new/prefix1/ico/log.png</normaloff>:/new/prefix1/ico/log.png</iconset>
+   </property>
+   <property name="text">
+    <string>Log</string>
+   </property>
+  </action>
+  <action name="actionLock">
+   <property name="icon">
+    <iconset resource="js.qrc">
+     <normaloff>:/new/prefix1/ico/lock.png</normaloff>:/new/prefix1/ico/lock.png</iconset>
+   </property>
+   <property name="text">
+    <string>Lock</string>
+   </property>
+  </action>
+  <action name="actionStatus">
+   <property name="icon">
+    <iconset resource="js.qrc">
+     <normaloff>:/new/prefix1/ico/conect.png</normaloff>:/new/prefix1/ico/conect.png</iconset>
+   </property>
+   <property name="text">
+    <string>Status</string>
+   </property>
+  </action>
+  <action name="actionVideo_1">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="js.qrc">
+     <normaloff>:/new/prefix1/ico/video.png</normaloff>:/new/prefix1/ico/video.png</iconset>
+   </property>
+   <property name="text">
+    <string>Video_1</string>
+   </property>
+  </action>
+  <action name="actionVideo_2">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="js.qrc">
+     <normaloff>:/new/prefix1/ico/video.png</normaloff>:/new/prefix1/ico/video.png</iconset>
+   </property>
+   <property name="text">
+    <string>Video_2</string>
+   </property>
+  </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="js.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -1,0 +1,14 @@
+﻿  Generate moc_predefs.h
+  Moc'ing datainterchange.h...
+  Moc'ing datainterchangeinterface.h...
+  Moc'ing tcpclient.h...
+  Moc'ing tcpserver.h...
+  datainterchange.cpp
+  tcpclient.cpp
+  tcpserver.cpp
+  moc_datainterchange.cpp
+  moc_datainterchangeinterface.cpp
+  moc_tcpclient.cpp
+  moc_tcpserver.cpp
+    正在创建库 ..\MainUI\Plugins\\Cc1_DataInterTCP.lib 和对象 ..\MainUI\Plugins\\Cc1_DataInterTCP.exp
+  Cc1_DataInterTCP.vcxproj -> C:\Users\cc\Documents\Qt\Container_Multiple_Channels_20200522\Container_Multiple_Channels_20200522\DataInterchange\..\MainUI\Plugins\Cc1_DataInterTCP.dll
