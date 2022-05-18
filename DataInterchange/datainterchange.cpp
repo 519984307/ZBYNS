@@ -138,7 +138,10 @@ void DataInterchange::receiveDataSlot()
 {
     QByteArray buf=pTcpClient->readAll();    
     if(buf.trimmed().startsWith("cap")){
-        emit toSendDataSignal(channel,buf);
+        QList<QByteArray> tmpR = buf.split('=');
+        if(tmpR.size()==2){
+            emit toSendDataSignal(tmpR.at(1).toInt(),buf);
+        }
     }
     else {
         /*****************************

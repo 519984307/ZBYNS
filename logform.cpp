@@ -37,7 +37,14 @@ void LogForm::slot_newLogText(QtMsgType type, QDateTime time, QString value)
         abort();
     }
 
-    ui->plainTextEdit->appendPlainText(QString("%1 %2 %3").arg(msgType,time.toString("yyyy-MM-dd hh:mm:ss zzz"),value));
+    if(msgType.size()<8){
+        int cot=8-msgType.size();
+        for(int i=0;i<cot;i++){
+            msgType.append(" ");
+        }
+    }
+
+    ui->plainTextEdit->appendPlainText(QString("%1 %2 %3").arg(time.toString("yyyy-MM-dd hh:mm:ss zzz"),msgType,value));
 }
 
 void LogForm::on_pushButton_clicked()

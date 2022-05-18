@@ -9,8 +9,11 @@ void TcpClient::receiveDataSlot()
 {
     QByteArray buf=readAll();
 
-    if(buf.trimmed()=="cap=1"){
-        emit toSendDataSignal(0,buf);
+    if(buf.trimmed().startsWith("cap")){
+        QList<QByteArray> tmpR = buf.split('=');
+        if(tmpR.size()==2){
+            emit toSendDataSignal(tmpR.at(1).toInt(),buf);
+        }
     }
     else {
         /*****************************

@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QFileDialog>
+#include <QTimer>
 
 namespace Ui {
 class TestDialog;
@@ -19,27 +20,28 @@ public:
 private slots:
 
     ///
-    /// \brief on_buttonBox_accepted 确认抓拍
+    /// \brief slotCapTimer 循环模拟抓拍
     ///
-    void on_buttonBox_accepted();
-
-    ///
-    /// \brief on_buttonBox_rejected 取消抓拍
-    ///
-    void on_buttonBox_rejected();
+    void slotCapTimer();
 
     ///
     /// \brief on_pushButton_clicked 本地识别
     ///
     void on_pushButton_clicked();
 
+    void on_checkBox_clicked(bool checked);
+
+    void on_radioButton_2_clicked(bool checked);
+
+    void on_pushButton_2_clicked();
+
 private:
     Ui::TestDialog *ui;
 
     ///
-    /// \brief isChoose 识别本地图片状态
+    /// \brief capTimer 循环抓拍
     ///
-    bool isChoose;
+    QTimer* capTimer;
 
 signals:
 
@@ -48,6 +50,13 @@ signals:
     /// \param imgPath
     ///
     void signalRecognitionPicture(int type,QString img);
+
+
+    ///
+    /// \brief signalTestCap 测试抓拍图片
+    /// \param signature
+    ///
+    void signalTestCap(int channel);
 };
 
 #endif // TESTDIALOG_H

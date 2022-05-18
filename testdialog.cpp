@@ -7,38 +7,62 @@ TestDialog::TestDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    isChoose=false;
+    capTimer=new QTimer(this);
+    capTimer->setSingleShot(false);
+    connect(capTimer,&QTimer::timeout,this,&TestDialog::slotCapTimer);
 }
 
 TestDialog::~TestDialog()
 {
+    capTimer->stop();
+    delete capTimer;
+    capTimer=nullptr;
+
     delete ui;
 }
 
-void TestDialog::on_buttonBox_accepted()
+void TestDialog::slotCapTimer()
 {
-    if(isChoose){
-        this->done(99);
-    }
-    else {
-        this->done(ui->lineEdit->text().toInt());
-    }
-    this->accepted();
-    isChoose=false;
-}
-
-void TestDialog::on_buttonBox_rejected()
-{
-    this->done(-1);
-    this->rejected();
-    isChoose=false;
+    emit signalTestCap(ui->comboBox->currentIndex()+1);
 }
 
 void TestDialog::on_pushButton_clicked()
 {
     QString imgPath=QFileDialog::getOpenFileName(this,QString::fromLocal8Bit("Choose Image"),"","Images (*.*)");
     if(!imgPath.isEmpty()){
-        isChoose=true;
         emit signalRecognitionPicture(0,imgPath);
     }
+}
+
+void TestDialog::on_checkBox_clicked(bool checked)
+{
+    if(checked){
+        capTimer->start(10000);
+
+        ui->pushButton_2->setEnabled(false);
+        ui->radioButton_2->setEnabled(false);
+    }
+    else {
+        capTimer->stop();
+
+        ui->pushButton_2->setEnabled(true);
+        ui->radioButton_2->setEnabled(true);
+    }
+}
+
+void TestDialog::on_radioButton_2_clicked(bool checked)
+{
+    if(checked){
+        ui->pushButton_2->setEnabled(false);
+        ui->checkBox->setEnabled(false);
+    }
+    else {
+        ui->pushButton_2->setEnabled(true);
+        ui->checkBox->setEnabled(true);
+    }
+}
+
+void TestDialog::on_pushButton_2_clicked()
+{
+    emit signalTestCap(ui->comboBox->currentIndex()+1);
 }

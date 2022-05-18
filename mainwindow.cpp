@@ -9,16 +9,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     loadParment();
 
+    ui->actionStatus->setIconText("Not Link!");
+
     pDataBase=new DataBase(this);
     connect(this,&MainWindow::signalInitDataBase,pDataBase,&DataBase::initDataBaseSlot);
     connect(this,&MainWindow::signalInsertDataBase,pDataBase,&DataBase::insertDataBaseSlot);
 
     pLog=QPointer<LogController>(new LogController("ZBY_NS",this));
     connect(pLog.data(),SIGNAL(signal_newLogText(QtMsgType,QDateTime,QString)),&logFrom,SLOT(slot_newLogText(QtMsgType,QDateTime,QString)));
-
-    capNum=-1;
-    capTimer=new QTimer(this);
-    connect(capTimer,&QTimer::timeout,this,&MainWindow::slotCapTimer);
 
     pOCR_NUM=new OCR_NUM (this);
     connect(this,&MainWindow::signalDetectText,pOCR_NUM,&OCR_NUM::decectTcpImageSlot);
@@ -65,8 +63,12 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     emit signalSetCaptureType(1,0);
-    emit signalInitCamera("",camera1.at(0),37777,camera1.at(1),camera1.at(2),"1");
-    emit signalInitCamera("",camera2.at(0),37777,camera2.at(1),camera2.at(2),"2");
+    emit signalInitCamera("",camera1.at(0),37777,camera1.at(1),camera1.at(2),"11");
+    emit signalInitCamera("",camera2.at(0),37777,camera2.at(1),camera2.at(2),"12");
+    emit signalInitCamera("",camera3.at(0),37777,camera1.at(1),camera1.at(2),"21");
+    emit signalInitCamera("",camera4.at(0),37777,camera2.at(1),camera2.at(2),"22");
+    emit signalInitCamera("",camera5.at(0),37777,camera1.at(1),camera1.at(2),"31");
+    emit signalInitCamera("",camera6.at(0),37777,camera2.at(1),camera2.at(2),"32");
     emit signalInitDataBase("ZBYNS","admin","ABCabc123","127.0.0.1",0);
 
     if(model==1){
@@ -81,19 +83,11 @@ MainWindow::MainWindow(QWidget *parent)
 //    * @brief:设置识别器模式
 //    ******************************/
 //    emit signalDetectText("-m 0",-1);
-
-    ui->lineEdit_4->setText(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"));
+//    ui->lineEdit_4->setText(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"));
 }
 
 MainWindow::~MainWindow()
 {
-//    delete pOCR_NUM;
-//    pOCR_NUM=nullptr;
-
-    capTimer->stop();
-    delete capTimer;
-    capTimer=nullptr;
-
     delete pLog;
     delete ui;
 }
@@ -126,8 +120,44 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event);
 
-    slotLoadPicture(1,testImg1);
-    slotLoadPicture(2,testImg2);
+    foreach(QString label,labelImgMap.keys()){
+        QPixmap pix(QDir::toNativeSeparators(labelImgMap.value(label)));
+
+        if(pix.isNull()){
+            continue;
+        }
+        QPalette palette;
+
+        palette.setBrush(QPalette::Background, QBrush(pix.scaled(ui->label->size(), Qt::IgnoreAspectRatio)));
+        ui->label->setPalette(palette);
+
+        if(label=="11"){
+            palette.setBrush(QPalette::Background, QBrush(pix.scaled(ui->label->size(), Qt::IgnoreAspectRatio)));
+            ui->label->setPalette(palette);
+        }
+        if(label=="12"){
+            palette.setBrush(QPalette::Background, QBrush(pix.scaled(ui->label_7->size(), Qt::IgnoreAspectRatio)));
+            ui->label_7->setPalette(palette);
+        }
+
+        if(label=="21"){
+            palette.setBrush(QPalette::Background, QBrush(pix.scaled(ui->label_2->size(), Qt::IgnoreAspectRatio)));
+            ui->label_2->setPalette(palette);
+        }
+        if(label=="22"){
+            palette.setBrush(QPalette::Background, QBrush(pix.scaled(ui->label_8->size(), Qt::IgnoreAspectRatio)));
+            ui->label_8->setPalette(palette);
+        }
+
+        if(label=="31"){
+            palette.setBrush(QPalette::Background, QBrush(pix.scaled(ui->label_9->size(), Qt::IgnoreAspectRatio)));
+            ui->label_9->setPalette(palette);
+        }
+        if(label=="32"){
+            palette.setBrush(QPalette::Background, QBrush(pix.scaled(ui->label_10->size(), Qt::IgnoreAspectRatio)));
+            ui->label_10->setPalette(palette);
+        }
+    }
 }
 
 void MainWindow::on_actionSetting_triggered()
@@ -160,25 +190,44 @@ void MainWindow::loadParment()
 {
     QString path = QStandardPaths::writableLocation( QStandardPaths::AppConfigLocation);
     QSettings set(QDir::toNativeSeparators(QString("%1/Parment.ini").arg(path)),QSettings::IniFormat);
-    set.setIniCodec("UTF-8");
+    set.setIniCodec("GBK");
 
-    set.beginGroup("Camera1");
-    camera1.append(set.value("address","192.168.1.101").toString());
-    camera1.append(set.value("user","admin").toString());
-    camera1.append(set.value("password","ABCabc123").toString());
-    camera1.append(QString::number(set.value("camType","0").toInt()));
+    set.beginGroup("channel1");
+    camera1.append(set.value("address1","192.168.1.101").toString());
+    camera1.append(set.value("user1","admin").toString());
+    camera1.append(set.value("password1","ABCabc123").toString());
+    camera1.append(QString::number(set.value("camType1","0").toInt()));
+    camera2.append(set.value("address2","192.168.1.101").toString());
+    camera2.append(set.value("user2",3777).toString());
+    camera2.append(set.value("password2","ABCabc123").toString());
+    camera2.append(QString::number(set.value("camType2","0").toInt()));
     set.endGroup();
 
-    set.beginGroup("Camera2");
-    camera2.append(set.value("address","192.168.1.101").toString());
-    camera2.append(set.value("user",3777).toString());
-    camera2.append(set.value("password","ABCabc123").toString());
-    camera2.append(QString::number(set.value("camType","0").toInt()));
+    set.beginGroup("channel2");
+    camera3.append(set.value("address1","192.168.1.101").toString());
+    camera3.append(set.value("user1","admin").toString());
+    camera3.append(set.value("password1","ABCabc123").toString());
+    camera3.append(QString::number(set.value("camType1","0").toInt()));
+    camera4.append(set.value("address2","192.168.1.101").toString());
+    camera4.append(set.value("user2",3777).toString());
+    camera4.append(set.value("password2","ABCabc123").toString());
+    camera4.append(QString::number(set.value("camType2","0").toInt()));
+    set.endGroup();
+
+    set.beginGroup("channel3");
+    camera5.append(set.value("address1","192.168.1.101").toString());
+    camera5.append(set.value("user1","admin").toString());
+    camera5.append(set.value("password1","ABCabc123").toString());
+    camera5.append(QString::number(set.value("camType1","0").toInt()));
+    camera6.append(set.value("address2","192.168.1.101").toString());
+    camera6.append(set.value("user2",3777).toString());
+    camera6.append(set.value("password2","ABCabc123").toString());
+    camera6.append(QString::number(set.value("camType2","0").toInt()));
     set.endGroup();
 
     set.beginGroup("Main");
     imgPath=set.value("imgPath","C:\\Images").toString();
-    lock=set.value("lock","870888").toString();
+    lock=set.value("lock","123456").toString();
     quit=set.value("quit",1).toInt();
     channel=set.value("channel",1).toInt();
     set.endGroup();
@@ -205,116 +254,71 @@ void MainWindow::on_actionLock_triggered()
     }
 }
 
-void MainWindow::on_actionVideo_1_triggered(bool checked)
+void MainWindow::on_actionTest_triggered()
 {
-    emit signalOpenTheVideo(cameraBingIDMap.value("1"),checked,ui->label->winId());
+    QSharedPointer<TestDialog> testDlg=QSharedPointer<TestDialog>(new TestDialog(this));
+    connect(testDlg.data(),&TestDialog::signalRecognitionPicture,this,&MainWindow::slotLoadPicture);
+    connect(testDlg.data(),&TestDialog::signalTestCap,this,&MainWindow::slotTestCap);
+    testDlg->exec();
 }
 
-void MainWindow::on_actionVideo_2_triggered(bool checked)
+void MainWindow::slotTestCap(int channel)
 {
-    emit signalOpenTheVideo(cameraBingIDMap.value("2"),checked,ui->label_2->winId());
-}
-
-void MainWindow::on_actionTest_triggered(bool checked)
-{
-    testImg1.clear();
-    testImg2.clear();
-
-    imgArrMap.clear();
-
-    if(checked){
-        capTime=QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz");
-
-        QSharedPointer<TestDialog> testDlg=QSharedPointer<TestDialog>(new TestDialog(this));
-        connect(testDlg.data(),&TestDialog::signalRecognitionPicture,this,&MainWindow::slotLoadPicture);
-        capNum= testDlg->exec();
-
-        if(capNum==-1){
-            qDebug().noquote()<<QString("Cancel capture identification");
-            ui->actionTest->setChecked(false);
-        }
-        else if (capNum==99) {
-            emit signalDetectText(testImg1,1);
-            emit signalDetectText("testImg2",2);
-
-            ui->actionTest->setChecked(false);
-        }
-        else if (capNum==1) {
-            emit signalSimulationCapture(cameraBingIDMap.value("1"));
-            emit signalSimulationCapture(cameraBingIDMap.value("2"));
-            ui->actionTest->setChecked(false);
-            //ui->actionTest->setCheckable(Qt::Unchecked);
-        }
-        else
-        {
-            /*****************************
-            * @brief:循环抓拍
-            ******************************/
-            capTimer->setSingleShot(false);
-            capTimer->start(10000);
-        }
+    switch (channel) {
+    case 1:
+        ui->lineEdit->clear();
+        ui->lineEdit_2->clear();
+        ui->lineEdit_3->clear();
+        break;
+    case 2:
+        ui->lineEdit_8->clear();
+        ui->lineEdit_9->clear();
+        ui->lineEdit_10->clear();
+        break;
+    case 3:
+        ui->lineEdit_11->clear();
+        ui->lineEdit_12->clear();
+        ui->lineEdit_13->clear();
+        break;
     }
-    else {
-        capTimer->stop();
-        capTimer->setSingleShot(true);
-        capNum=-1;
-    }
+
+
+    capTime=QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz");
+
+    emit signalSimulationCapture(cameraBingIDMap.value(QString("%1%2").arg(channel).arg(1),-1));
+    emit signalSimulationCapture(cameraBingIDMap.value(QString("%1%2").arg(channel).arg(2),-1));
 }
 
 void MainWindow::slotLoadPicture(int type, QString img)
 {
-    QPixmap pix(QDir::toNativeSeparators(img));
+    Q_UNUSED(type)
 
-    if(0==type){
-        testImg1=img;
-    }
+    QPixmap pix(QDir::toNativeSeparators(img));
 
     if(pix.isNull()){
         return;
     }
     QPalette palette;
 
-    if(1==type || 0 == type){
-        palette.setBrush(QPalette::Background, QBrush(pix.scaled(ui->label->size(), Qt::IgnoreAspectRatio)));
-        ui->label->setPalette(palette);
+    palette.setBrush(QPalette::Background, QBrush(pix.scaled(ui->label->size(), Qt::IgnoreAspectRatio)));
+    ui->label->setPalette(palette);
 
-        QFile f(img);
-        if (f.open(QIODevice::ReadOnly))
-        {
-            imgArrMap.insert(img,f.readAll());
-            f.close();
-        }
-
-    }
-    else {
-        QPalette palette;
-        ui->label->setPalette(palette);
+    QFile f(img);
+    if (f.open(QIODevice::ReadOnly))
+    {
+        imgArrMap.insert(img,f.readAll());
+        f.close();
     }
 
+    labelImgMap.insert("11",img);
 
-    if(2==type){
-        palette.setBrush(QPalette::Background, QBrush(pix.scaled(ui->label_2->size(), Qt::IgnoreAspectRatio)));
-        ui->label_2->setPalette(palette);
-
-        QFile f(img);
-        if (f.open(QIODevice::ReadOnly))
-        {
-            imgArrMap.insert(img,f.readAll());
-            f.close();
-        }
-    }
-    else {
-        QPalette palette;
-        ui->label_2->setPalette(palette);
-    }
+    signalDetectText(img,11);
+    signalDetectText(img,11);
 }
 
 void MainWindow::slotlDetectResult(QString rst)
 {
-    //qDebug()<<"rst:"<<rst;
-    ui->lineEdit->clear();
-    ui->lineEdit_2->clear();
-    ui->lineEdit_3->clear();
+    qDebug()<<"rst:"<<rst;
 
     if(rstList.size()!=2){
         if(rst.trimmed().indexOf(" ")==-1){
@@ -326,9 +330,36 @@ void MainWindow::slotlDetectResult(QString rst)
     }
 
     if(rstList.size()==2){
+
+        bool localCap=false;
+        /*****************************
+        * @brief:识别本地图片，不写入数据库
+        ******************************/
+        if(labelImgMap.key(rstList.at(0).split('-').at(0))==labelImgMap.key(rstList.at(1).split('-').at(0))){
+            localCap=true;
+        }
+
+        QString tmp=rstList.at(0);
+        if(tmp.indexOf('-')==-1){
+            tmp=rstList.at(1);
+        }
+
+        int cl=0;
+        if(localCap){
+            cl=labelImgMap.key(tmp.split("-").at(0)).toInt();
+        }
+        else {
+            cl=tmp.mid(tmp.indexOf(".jpg")-2,1).toInt();
+        }
+
         QMap<QString,QString> dataMap;
-        dataMap.insert("Channel",QString::number(channel));
-        dataMap.insert("Timer",QDateTime::fromString(capTime,"yyyyMMddhhmmsszzz").toString("yyyy-MM-dd hh:mm:ss zzz"));
+        dataMap.insert("Channel",QString::number(cl));
+        if(localCap){
+            dataMap.insert("Timer",QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss zzz"));
+        }
+        else {
+            dataMap.insert("Timer",QDateTime::fromString(capTime,"yyyyMMddhhmmsszzz").toString("yyyy-MM-dd hh:mm:ss zzz"));
+        }
 
         double source=0;
         QString result="";
@@ -375,30 +406,59 @@ void MainWindow::slotlDetectResult(QString rst)
                 }
             }
         }
-        ui->lineEdit->setText(result);
-        ui->lineEdit_2->setText(QString::number(source));
-        ui->lineEdit_3->setText(QDateTime::fromString(capTime,"yyyyMMddhhmmsszzz").toString("yyyy-MM-dd hh:mm:ss zzz"));
+
+        if(localCap){
+            cl-=10;
+        }
+
+        switch (cl) {
+        case 1:
+            ui->lineEdit->setText(result);
+            ui->lineEdit_2->setText(QString::number(source));
+            if(localCap){
+                ui->lineEdit_3->setText(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss zzz"));
+            }
+            else {
+                ui->lineEdit_3->setText(QDateTime::fromString(capTime,"yyyyMMddhhmmsszzz").toString("yyyy-MM-dd hh:mm:ss zzz"));
+            }
+            break;
+        case 2:
+            ui->lineEdit_8->setText(result);
+            ui->lineEdit_9->setText(QString::number(source));
+            ui->lineEdit_10->setText(QDateTime::fromString(capTime,"yyyyMMddhhmmsszzz").toString("yyyy-MM-dd hh:mm:ss zzz"));
+            break;
+        case 3:
+            ui->lineEdit_11->setText(result);
+            ui->lineEdit_12->setText(QString::number(source));
+            ui->lineEdit_13->setText(QDateTime::fromString(capTime,"yyyyMMddhhmmsszzz").toString("yyyy-MM-dd hh:mm:ss zzz"));
+            break;
+        }
+//        ui->lineEdit->setText(result);
+//        ui->lineEdit_2->setText(QString::number(source));
+//        ui->lineEdit_3->setText(QDateTime::fromString(capTime,"yyyyMMddhhmmsszzz").toString("yyyy-MM-dd hh:mm:ss zzz"));
 
         dataMap.insert("Number",result);
         dataMap.insert("Check",result.isEmpty()?"0":"1");
 
-        emit signalInsertDataBase(dataMap);
+        if(!localCap){
+            emit signalInsertDataBase(dataMap);
+        }
 
         /*****************************
         * @brief:抓拍数量
         ******************************/
-        ui->lineEdit_5->setText(QString::number(++capCount));
-        if(result.isEmpty()){
-            ++capCountErr;
-        }
-        ui->lineEdit_6->setText(QString("%1%").arg(100-capCountErr/capCount*100));
+//        ui->lineEdit_5->setText(QString::number(++capCount));
+//        if(result.isEmpty()){
+//            ++capCountErr;
+//        }
+//        ui->lineEdit_6->setText(QString("%1%").arg(100-capCountErr/capCount*100));
 
         int code=1;
         if(!img1.isEmpty() && !img2.isEmpty()){
             code=0;
         }
         QString msg=QString("time=%1,channel=%2,check=%3,result=%4,code=%5,imgPath=").arg(QDateTime::fromString(capTime,"yyyyMMddhhmmsszzz").toString("yyyy-MM-dd hh:mm:ss zzz"),
-                                                                                           QString::number(channel),
+                                                                                           QString::number(cl),
                                                                                            result.isEmpty()?"0":"1",
                                                                                            result,
                                                                                            QString::number(code));
@@ -428,21 +488,6 @@ void MainWindow::slotlDetectResult(QString rst)
     }
 }
 
-void MainWindow::slotCapTimer()
-{
-    if(capNum==0){
-        ui->actionTest->setChecked(false);
-        capTimer->stop();
-    }
-    else {
-        capTime=QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz");
-
-        emit signalSimulationCapture(cameraBingIDMap.value("1"));
-        emit signalSimulationCapture(cameraBingIDMap.value("2"));
-    }
-    capNum--;
-}
-
 void MainWindow::slotPictureStream(LLONG lLoginID, QByteArray arrImg)
 {
     QDir dir(imgPath);
@@ -461,25 +506,37 @@ void MainWindow::slotPictureStream(LLONG lLoginID, QByteArray arrImg)
 
     QPalette palette;
 
-    if(cameraBingIDMap.key(lLoginID)=="1"){
+    if(cameraBingIDMap.key(lLoginID)=="11"){
         palette.setBrush(QPalette::Background, QBrush(pix.data()->scaled(ui->label->size(), Qt::IgnoreAspectRatio)));
         ui->label->setPalette(palette);
     }
-    if(cameraBingIDMap.key(lLoginID)=="2"){
+    if(cameraBingIDMap.key(lLoginID)=="12"){
+        palette.setBrush(QPalette::Background, QBrush(pix.data()->scaled(ui->label_7->size(), Qt::IgnoreAspectRatio)));
+        ui->label_7->setPalette(palette);
+    }
+
+    if(cameraBingIDMap.key(lLoginID)=="21"){
         palette.setBrush(QPalette::Background, QBrush(pix.data()->scaled(ui->label_2->size(), Qt::IgnoreAspectRatio)));
         ui->label_2->setPalette(palette);
+    }
+    if(cameraBingIDMap.key(lLoginID)=="22"){
+        palette.setBrush(QPalette::Background, QBrush(pix.data()->scaled(ui->label_8->size(), Qt::IgnoreAspectRatio)));
+        ui->label_8->setPalette(palette);
+    }
+
+    if(cameraBingIDMap.key(lLoginID)=="31"){
+        palette.setBrush(QPalette::Background, QBrush(pix.data()->scaled(ui->label_9->size(), Qt::IgnoreAspectRatio)));
+        ui->label_9->setPalette(palette);
+    }
+    if(cameraBingIDMap.key(lLoginID)=="32"){
+        palette.setBrush(QPalette::Background, QBrush(pix.data()->scaled(ui->label_10->size(), Qt::IgnoreAspectRatio)));
+        ui->label_10->setPalette(palette);
     }
 
     QString img=QDir::toNativeSeparators(QString("%1/%2%3.jpg").arg(dir.path(),capTime,cameraBingIDMap.key(lLoginID)));
     pix->save(img);
 
-    if(cameraBingIDMap.key(lLoginID)=="1"){
-        testImg1=img;
-    }
-    if(cameraBingIDMap.key(lLoginID)=="2"){
-        testImg2=img;
-    }
-
+    labelImgMap.insert(cameraBingIDMap.key(lLoginID),QDir::fromNativeSeparators(img));
     imgArrMap.insert(QDir::fromNativeSeparators(img),arrImg);
 
     signalDetectText(img,cameraBingIDMap.key(lLoginID).toInt());
@@ -487,37 +544,66 @@ void MainWindow::slotPictureStream(LLONG lLoginID, QByteArray arrImg)
 
 void MainWindow::slotCameraStatus(LLONG lLoginID, bool status)
 {
-    if(cameraBingIDMap.key(lLoginID)=="1"){
-        ui->actionVideo_1->setEnabled(status);
-        ui->actionVideo_1->setChecked(status);
+    if(cameraBingIDMap.key(lLoginID)=="11"){
+        ui->checkBox->setEnabled(status);
+        ui->checkBox->setChecked(status);
     }
-    if(cameraBingIDMap.key(lLoginID)=="2"){
-        ui->actionVideo_2->setEnabled(status);
-        ui->actionVideo_2->setChecked(status);
+    if(cameraBingIDMap.key(lLoginID)=="12"){
+        ui->checkBox_4->setEnabled(status);
+        ui->checkBox_4->setChecked(status);
+    }
+    if(cameraBingIDMap.key(lLoginID)=="21"){
+        ui->checkBox_2->setEnabled(status);
+        ui->checkBox_2->setChecked(status);
+    }
+    if(cameraBingIDMap.key(lLoginID)=="22"){
+        ui->checkBox_5->setEnabled(status);
+        ui->checkBox_5->setChecked(status);
+    }
+    if(cameraBingIDMap.key(lLoginID)=="31"){
+        ui->checkBox_3->setEnabled(status);
+        ui->checkBox_3->setChecked(status);
+    }
+    if(cameraBingIDMap.key(lLoginID)=="32"){
+        ui->checkBox_6->setEnabled(status);
+        ui->checkBox_6->setChecked(status);
     }
 }
 
 void MainWindow::slotSetCameraID(LLONG ID, QString signature)
 {
-    //qInfo().noquote()<<QString("Bind camera ID");
     cameraBingIDMap.insert(signature,ID);
 }
 
 void MainWindow::socketReadDataSlot(int channel_number, const QString &result)
 {
-    Q_UNUSED(channel_number)
-    Q_UNUSED(result)
+    qDebug().noquote()<<result;
 
-    testImg2.clear();
-    testImg2.clear();
+    switch (channel_number) {
+    case 1:
+        ui->lineEdit->clear();
+        ui->lineEdit_2->clear();
+        ui->lineEdit_3->clear();
+        break;
+    case 2:
+        ui->lineEdit_8->clear();
+        ui->lineEdit_9->clear();
+        ui->lineEdit_10->clear();
+        break;
+    case 3:
+        ui->lineEdit_11->clear();
+        ui->lineEdit_12->clear();
+        ui->lineEdit_13->clear();
+        break;
+    }
+
     imgArrMap.clear();
 
-    QStringList tmpR = result.split("=");
-    if(tmpR.size()==2 && tmpR.at(1).toInt()==channel){
+    if(result.startsWith("cap=")){
         capTime=QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz");
 
-        emit signalSimulationCapture(cameraBingIDMap.value("1",0));
-        emit signalSimulationCapture(cameraBingIDMap.value("2",0));
+        emit signalSimulationCapture(cameraBingIDMap.value(QString("%1%2").arg(channel_number).arg(1),-1));
+        emit signalSimulationCapture(cameraBingIDMap.value(QString("%1%2").arg(channel_number).arg(2),-1));
     }
 }
 
@@ -527,19 +613,49 @@ void MainWindow::TCP_socketLinkStateSlot(const QString &address,quint16 port,boo
     Q_UNUSED(port);
 
     if(state){
-        ui->lineEdit_7->setText(QString::number(++count));
+        ++count;
     }
     else {
         if(count>0){
-            ui->lineEdit_7->setText(QString::number(--count));
+            --count;
         }
     }
 
     if(count>0){
-        ui->label_6->setStyleSheet("background-color: rgb(0, 170, 0);color: rgb(255, 255, 255);");
+        ui->actionStatus->setIconText(QString("Link:%1").arg(count));
     }
     else
     {
-        ui->label_6->setStyleSheet("background-color: rgb(170, 0, 0);color: rgb(255, 255, 255);");
+        ui->actionStatus->setIconText("Not Link!");
     }
+}
+
+void MainWindow::on_checkBox_stateChanged(int arg1)
+{
+    emit signalOpenTheVideo(cameraBingIDMap.value("11"),arg1,ui->label->winId());
+}
+
+void MainWindow::on_checkBox_2_stateChanged(int arg1)
+{
+    emit signalOpenTheVideo(cameraBingIDMap.value("21"),arg1,ui->label_2->winId());
+}
+
+void MainWindow::on_checkBox_3_stateChanged(int arg1)
+{
+    emit signalOpenTheVideo(cameraBingIDMap.value("31"),arg1,ui->label_9->winId());
+}
+
+void MainWindow::on_checkBox_4_stateChanged(int arg1)
+{
+    emit signalOpenTheVideo(cameraBingIDMap.value("12"),arg1,ui->label_7->winId());
+}
+
+void MainWindow::on_checkBox_5_stateChanged(int arg1)
+{
+    emit signalOpenTheVideo(cameraBingIDMap.value("22"),arg1,ui->label_8->winId());
+}
+
+void MainWindow::on_checkBox_6_stateChanged(int arg1)
+{
+    emit signalOpenTheVideo(cameraBingIDMap.value("32"),arg1,ui->label_10->winId());
 }

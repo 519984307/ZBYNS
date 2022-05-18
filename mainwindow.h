@@ -69,24 +69,6 @@ private slots:
     ///
     void on_actionLock_triggered();
 
-    ///
-    /// \brief on_actionVideo_1_triggered 打开1号相机显示屏
-    /// \param checked
-    ///
-    void on_actionVideo_1_triggered(bool checked);
-
-    ///
-    /// \brief on_actionVideo_2_triggered 打开2号相机显示屏
-    /// \param checked
-    ///
-    void on_actionVideo_2_triggered(bool checked);
-
-    ///
-    /// \brief on_actionTest_triggered 启动抓拍测试
-    /// \param checked
-    ///
-    void on_actionTest_triggered(bool checked);
-
 private:
 
     Ui::MainWindow *ui;
@@ -129,12 +111,16 @@ private:
     /*****************************
     * @brief:系统参数
     ******************************/
-    QVector<QString> camera1,camera2;
+    QVector<QString> camera1,camera2,camera3,camera4,camera5,camera6;
     QString imgPath,address;
     QString lock;
-    QString testImg1,testImg2;
     int quit,model,port,heart,count,channel;
     int capCount,capCountErr;
+
+    ///
+    /// \brief labelImgMap 调整图片显示
+    ///
+    QMap<QString,QString> labelImgMap;
 
     ///
     /// \brief imgArrMap 图片流集
@@ -151,17 +137,13 @@ private:
     ///
     QString capTime;
 
-    ///
-    /// \brief capNum 模拟抓拍次数
-    ///
-    int capNum;
-
-    ///
-    /// \brief capTimer 循环抓拍
-    ///
-    QTimer* capTimer;
-
 private slots:
+
+    ///
+    /// \brief slotTestCap 测试抓拍图片
+    /// \param signature
+    ///
+    void slotTestCap(int channel);
 
     ///
     /// \brief slotLoadPicture 加载本地图片
@@ -174,11 +156,6 @@ private slots:
     /// \param rst
     ///
     void slotlDetectResult(QString rst);
-
-    ///
-    /// \brief slotCapTimer 循环模拟抓拍
-    ///
-    void slotCapTimer();
 
     ///
     /// \brief slotPictureStream 抓拍图片流
@@ -214,6 +191,18 @@ private slots:
     /// \param state
     ///
     void TCP_socketLinkStateSlot(const QString &address,quint16 port,bool state);
+
+    /*****************************
+    * @brief:打开视频流
+    ******************************/
+    void on_checkBox_stateChanged(int arg1);
+    void on_checkBox_2_stateChanged(int arg1);
+    void on_checkBox_3_stateChanged(int arg1);
+    void on_checkBox_4_stateChanged(int arg1);
+    void on_checkBox_5_stateChanged(int arg1);
+    void on_checkBox_6_stateChanged(int arg1);
+
+    void on_actionTest_triggered();
 
 signals:
 
