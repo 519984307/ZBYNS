@@ -264,21 +264,36 @@ void MainWindow::on_actionTest_triggered()
 
 void MainWindow::slotTestCap(int channel)
 {
+    this->channel=channel;
+    QPalette palette;
+
     switch (channel) {
     case 1:
         ui->lineEdit->clear();
         ui->lineEdit_2->clear();
         ui->lineEdit_3->clear();
+
+        ui->label->setPalette(palette);
+        ui->label_7->setPalette(palette);
+
         break;
     case 2:
         ui->lineEdit_8->clear();
         ui->lineEdit_9->clear();
         ui->lineEdit_10->clear();
+
+        ui->label_2->setPalette(palette);
+        ui->label_8->setPalette(palette);
+
         break;
     case 3:
         ui->lineEdit_11->clear();
         ui->lineEdit_12->clear();
         ui->lineEdit_13->clear();
+
+        ui->label_9->setPalette(palette);
+        ui->label_10->setPalette(palette);
+
         break;
     }
 
@@ -292,13 +307,19 @@ void MainWindow::slotTestCap(int channel)
 void MainWindow::slotLoadPicture(int type, QString img)
 {
     Q_UNUSED(type)
+    channel=1;
+
+    QPalette palette;
+    ui->label->setPalette(palette);
+    ui->label_7->setPalette(palette);
+
 
     QPixmap pix(QDir::toNativeSeparators(img));
 
     if(pix.isNull()){
         return;
     }
-    QPalette palette;
+    //QPalette palette;
 
     palette.setBrush(QPalette::Background, QBrush(pix.scaled(ui->label->size(), Qt::IgnoreAspectRatio)));
     ui->label->setPalette(palette);
@@ -335,7 +356,7 @@ void MainWindow::slotlDetectResult(QString rst)
         /*****************************
         * @brief:识别本地图片，不写入数据库
         ******************************/
-        if(labelImgMap.key(rstList.at(0).split('-').at(0))==labelImgMap.key(rstList.at(1).split('-').at(0))){
+        if(labelImgMap.key(rstList.at(0).split('-').at(0))==labelImgMap.key(rstList.at(1).split('-').at(0)) && rstList.at(0).split('-').at(0)!="NULL"){
             localCap=true;
         }
 
@@ -347,13 +368,18 @@ void MainWindow::slotlDetectResult(QString rst)
         int cl=0;
         if(localCap){
             cl=labelImgMap.key(tmp.split("-").at(0)).toInt();
+            cl-=10;
         }
         else {
-            cl=tmp.mid(tmp.indexOf(".jpg")-2,1).toInt();
+            //cl=tmp.mid(tmp.indexOf(".jpg")-2,1).toInt();
+            cl=channel;
         }
+
+        //int cl=channel;
 
         QMap<QString,QString> dataMap;
         dataMap.insert("Channel",QString::number(cl));
+
         if(localCap){
             dataMap.insert("Timer",QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss zzz"));
         }
@@ -399,7 +425,7 @@ void MainWindow::slotlDetectResult(QString rst)
                     }
                     else {
                         if(source<tmpRR.at(1).toDouble()){
-                            result=tmpRR.at(0).at(0);
+                            result=tmpRR.at(0);
                             source=tmpRR.at(1).toDouble();
                         }
                     }
@@ -407,9 +433,9 @@ void MainWindow::slotlDetectResult(QString rst)
             }
         }
 
-        if(localCap){
-            cl-=10;
-        }
+//        if(localCap){
+//            cl-=10;
+//        }
 
         switch (cl) {
         case 1:
@@ -443,6 +469,7 @@ void MainWindow::slotlDetectResult(QString rst)
         if(!localCap){
             emit signalInsertDataBase(dataMap);
         }
+        //emit signalInsertDataBase(dataMap);
 
         /*****************************
         * @brief:抓拍数量
@@ -500,7 +527,7 @@ void MainWindow::slotPictureStream(LLONG lLoginID, QByteArray arrImg)
         pix->loadFromData(arrImg);
     }
     else {
-        slotlDetectResult("RESULT:|0|0");
+        slotlDetectResult("NULL-RESULT:|0|0");
         return;
     }
 
